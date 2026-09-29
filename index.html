@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0D9488" />
+  <title>云记账 · 多端同步</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230D9488'/><path d='M30 52l14 14 26-30' stroke='white' stroke-width='10' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- Desktop sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>
+        </span>
+        <span class="brand-name">云记账</span>
+      </div>
+      <nav class="nav" id="nav">
+        <button class="nav-item active" data-view="dashboard">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+          <span>概览</span>
+        </button>
+        <button class="nav-item" data-view="transactions">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>
+          <span>明细</span>
+        </button>
+        <button class="nav-item" data-view="reports">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-6"/></svg>
+          <span>报表</span>
+        </button>
+        <button class="nav-item" data-view="categories">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+          <span>分类</span>
+        </button>
+        <button class="nav-item" data-view="settings">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>设置</span>
+        </button>
+      </nav>
+      <div class="sync-status" id="syncStatus">
+        <div class="sync-dot" id="syncDot"></div>
+        <div class="sync-text">
+          <span class="sync-label" id="syncLabel">未连接</span>
+          <span class="sync-time" id="syncTime"></span>
+        </div>
+        <button class="sync-btn" id="quickSync" title="立即同步">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.4L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.4L21 8"/><path d="M3 21v-5h5"/><path d="M21 3v5h-5"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-toggle" id="menuToggle" aria-label="菜单">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <h1 class="topbar-title" id="topbarTitle">概览</h1>
+        <div class="topbar-actions">
+          <div class="month-picker" id="monthPicker">
+            <button class="icon-btn" id="prevMonth" aria-label="上月"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <span class="month-label" id="monthLabel">—</span>
+            <button class="icon-btn" id="nextMonth" aria-label="下月"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+        </div>
+      </header>
+
+      <div class="view-container" id="view"><!-- views rendered here --></div>
+    </main>
+
+    <!-- Mobile bottom nav -->
+    <nav class="bottom-nav" id="bottomNav">
+      <button class="bottom-item active" data-view="dashboard">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        <span>概览</span>
+      </button>
+      <button class="bottom-item" data-view="transactions">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>
+        <span>明细</span>
+      </button>
+      <button class="bottom-item bottom-add" id="bottomAdd" aria-label="记一笔">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <button class="bottom-item" data-view="reports">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-6"/></svg>
+        <span>报表</span>
+      </button>
+      <button class="bottom-item" data-view="settings">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 15h1a2 2 0 0 0 0-4h-.1a1.65 1.65 0 0 1-1.5-1 .5.5 0 0 1 0-.1 1.65 1.65 0 0 1 .3-1.8l.1-.1a2 2 0 1 0-2.8-2.8l-.1.1a1.65 1.65 0 0 1-1.8.3 1.65 1.65 0 0 1-1-1.5V4a2 2 0 0 0-4 0v.1a1.65 1.65 0 0 1-1 1.5 1.65 1.65 0 0 1-1.8-.3l-.1-.1a2 2 0 1 0-2.8 2.8l.1.1a1.65 1.65 0 0 1 .3 1.8v.1a1.65 1.65 0 0 1-1.5 1H4a2 2 0 0 0 0 4h.1a1.65 1.65 0 0 1 1.5 1v.1a1.65 1.65 0 0 1-.3 1.8l-.1.1a2 2 0 1 0 2.8 2.8l.1-.1a1.65 1.65 0 0 1 1.8-.3h.1a1.65 1.65 0 0 1 1 1.5V20a2 2 0 0 0 4 0v-.1a1.65 1.65 0 0 1 1-1.5 1.65 1.65 0 0 1 1.8.3l.1.1a2 2 0 1 0 2.8-2.8l-.1-.1a1.65 1.65 0 0 1-.3-1.8v-.1"/></svg>
+        <span>设置</span>
+      </button>
+    </nav>
+
+    <!-- FAB (desktop) -->
+    <button class="fab" id="fab" aria-label="记一笔">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </div>
+
+  <!-- Transaction modal -->
+  <div class="modal-backdrop" id="txModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h2 id="txModalTitle">记一笔</h2>
+        <button class="icon-btn" id="txClose" aria-label="关闭"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="type-switch" id="typeSwitch">
+          <button class="type-btn active" data-type="expense">支出</button>
+          <button class="type-btn" data-type="income">收入</button>
+        </div>
+        <div class="amount-input">
+          <span class="currency" id="amountCurrency">¥</span>
+          <input type="text" id="amountInput" inputmode="decimal" placeholder="0.00" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label>分类</label>
+          <div class="cat-grid" id="catGrid"></div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>日期</label>
+            <input type="date" id="dateInput" />
+          </div>
+          <div class="field">
+            <label>备注</label>
+            <input type="text" id="noteInput" placeholder="选填" maxlength="40" />
+          </div>
+        </div>
+        <p class="err-msg" id="txErr"></p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-ghost" id="txDelete" style="display:none">删除</button>
+        <button class="btn-primary" id="txSave">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category modal -->
+  <div class="modal-backdrop" id="catModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h2 id="catModalTitle">新建分类</h2>
+        <button class="icon-btn" id="catClose" aria-label="关闭"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="type-switch" id="catTypeSwitch">
+          <button class="type-btn active" data-type="expense">支出</button>
+          <button class="type-btn" data-type="income">收入</button>
+        </div>
+        <div class="field">
+          <label>图标</label>
+          <div class="emoji-grid" id="emojiGrid"></div>
+        </div>
+        <div class="field">
+          <label>名称</label>
+          <input type="text" id="catNameInput" placeholder="如：宠物" maxlength="10" />
+        </div>
+        <p class="err-msg" id="catErr"></p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-primary" id="catSave">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
